@@ -66,6 +66,10 @@ export default class HelloWorld extends Vue {
     if (!this.bmapData) {
       return;
     }
+
+    // 需要先清除overlay
+    this.bmapData.map.clearOverlays();
+
     for (let tmpPoint of this.locs) {
       // 创建标注
       const marker = new this.bmapData.BMap.Marker(tmpPoint);

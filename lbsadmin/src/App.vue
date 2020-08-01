@@ -1,21 +1,8 @@
 <template>
   <div id="app">
-    <!-- <canvas id="particles11" class="bg-particles"></canvas> -->
     <router-view />
   </div>
 </template>
-
-<script>
-// import { particles } from "@/utils/bgparticles";
-
-// export default {
-//   name: "App",
-//   mounted: () => {
-//     particles("particles11");
-//   }
-// };
-//
-</script>
 
 <style lang="scss">
 #app {

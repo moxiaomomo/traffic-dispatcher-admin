@@ -4,7 +4,7 @@ export function particles(canvasID: string) {
   if (!canvas) {
     return;
   }
-  let ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d');
   if (!ctx) {
     return;
   }
@@ -13,7 +13,7 @@ export function particles(canvasID: string) {
   if (!canvas2) {
     return;
   }
-  let ctx2 = canvas2.getContext('2d');
+  const ctx2 = canvas2.getContext('2d');
   if (!ctx2) {
     return;
   }
@@ -22,7 +22,7 @@ export function particles(canvasID: string) {
 
   const randomFunc = (min: number, max: number) => {
     if (min > max) {
-      var hold = max;
+      const hold = max;
       max = min;
       min = hold;
     }
@@ -30,7 +30,7 @@ export function particles(canvasID: string) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
-  let width = (canvas.width = window.innerWidth),
+  const width = (canvas.width = window.innerWidth),
     height = (canvas.height = window.innerHeight),
     hue = 217,
     stars: any[] = [];
@@ -39,26 +39,32 @@ export function particles(canvasID: string) {
   //星星数量
   const maxStars = unitScale * 10;
 
+  const initXY = () => {
+    const x = randomFunc(0, width * 0.99);
+    const y = randomFunc(0, height * 0.99);
+    return { x, y };
+  };
+
   const Star = (idx: number) => {
-    let radius = randomFunc(unitScale, unitScale * 5),
-      orbitX = randomFunc(0, width * 0.8),
-      orbitY = randomFunc(0, height * 0.8),
-      alpha = randomFunc(0, 2);
-    const initX = orbitX;
-    const initY = orbitY;
     const speed = randomFunc(1, 5);
-    console.log(radius);
+    const radius = randomFunc(unitScale, unitScale * 5);
+    let alpha = randomFunc(0, 2);
+    let postion = initXY();
 
     return function() {
-      orbitX += speed * 1.2;
-      orbitY += speed;
+      postion.x += speed * 1.2;
+      postion.y -= speed;
 
-      if (orbitX > width || orbitY > height || orbitX < 0 || orbitY < 0) {
-        orbitX = initX;
-        orbitY = initY;
+      if (
+        postion.x > width ||
+        postion.y > height ||
+        postion.x < 0 ||
+        postion.y < 0
+      ) {
+        postion = initXY();
       }
 
-      let twinkle = randomFunc(0, 10);
+      const twinkle = randomFunc(0, 10);
       if (twinkle === 1 && alpha > 0) {
         alpha -= 0.01;
       } else if (twinkle === 2 && alpha < 1) {
@@ -67,7 +73,7 @@ export function particles(canvasID: string) {
 
       if (ctx) {
         ctx.globalAlpha = alpha;
-        ctx.drawImage(canvas2, orbitX, orbitY, radius, radius);
+        ctx.drawImage(canvas2, postion.x, postion.y, radius, radius);
       }
     };
   };
@@ -88,7 +94,7 @@ export function particles(canvasID: string) {
   ctx2.arc(half, half, half, 0, Math.PI * 2);
   ctx2.fill();
 
-  for (var i = 0; i < maxStars; i++) {
+  for (let i = 0; i < maxStars; i++) {
     stars[i] = Star(i);
   }
 
@@ -102,7 +108,7 @@ export function particles(canvasID: string) {
       ctx.globalCompositeOperation = 'lighter';
     }
 
-    for (var i = 1, l = stars.length; i < l; i++) {
+    for (let i = 1, l = stars.length; i < l; i++) {
       stars[i]();
     }
 

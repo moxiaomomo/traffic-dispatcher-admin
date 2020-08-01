@@ -1,10 +1,10 @@
 <template>
   <div style="width:100%;height:100%;position:relative;">
     <baidu-map
+      id="bdmapCanvas"
       :center="center"
       :zoom="zoom"
       @ready="onBMapReady"
-      style="height:800px"
       @click="getClickInfo"
       :scroll-wheel-zoom="true"
     ></baidu-map>
@@ -45,6 +45,9 @@ export default class HelloWorld extends Vue {
   }
 
   public onBMapReady(data: any) {
+    const canvas = document.getElementById("bdmapCanvas") as HTMLElement;
+    canvas.style.height = `${window.innerHeight - 150}px`;
+
     const point = new data.BMap.Point(109.49926175379778, 36.60449676862417);
     data.map.centerAndZoom(point, 13);
     const marker = new data.BMap.Marker(point); // 创建标注

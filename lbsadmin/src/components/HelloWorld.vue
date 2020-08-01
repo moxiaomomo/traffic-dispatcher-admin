@@ -12,9 +12,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { WSService } from "@/service/ws.service";
 // import { particles } from "@/utils/bgparticles";
+
+export interface GeoLocation {
+  lng: number;
+  lat: number;
+}
 
 @Component({
   data: () => {
@@ -27,8 +32,10 @@ import { WSService } from "@/service/ws.service";
 export default class HelloWorld extends Vue {
   //   @Prop() private center!: { lng: number; lat: number };
   //   @Prop() private zoom!: number;
-  private sid = "testagv"; // new Date().getTime();
-  private wsSvc!: WSService;
+  // private sid = "testagv"; // new Date().getTime();
+  // private wsSvc!: WSService;
+  @Prop() locs!: GeoLocation[];
+  private bmapData = null;
 
   constructor() {
     super();
@@ -48,18 +55,31 @@ export default class HelloWorld extends Vue {
     const canvas = document.getElementById("bdmapCanvas") as HTMLElement;
     canvas.style.height = `${window.innerHeight - 150}px`;
 
-    const point = new data.BMap.Point(109.49926175379778, 36.60449676862417);
-    data.map.centerAndZoom(point, 13);
-    const marker = new data.BMap.Marker(point); // 创建标注
-    data.map.addOverlay(marker); // 将标注添加到地图中
-    const circle = new data.BMap.Circle(point, 8, {
-      strokeColor: "Blue",
-      strokeWeight: 8,
-      strokeOpacity: 1,
-      Color: "Red",
-      fillColor: "#dd2233"
-    });
-    data.map.addOverlay(circle);
+    const point = new data.BMap.Point(116.404, 39.915);
+    data.map.centerAndZoom(point, 15);
+
+    this.bmapData = data;
+  }
+
+  @Watch("locs")
+  public updateFlags() {
+    if (!this.bmapData) {
+      return;
+    }
+    for (let tmpPoint of this.locs) {
+      // 创建标注
+      const marker = new this.bmapData.BMap.Marker(tmpPoint);
+      this.bmapData.map.addOverlay(marker);
+      // 将标注添加到地图中
+      const circle = new this.bmapData.BMap.Circle(tmpPoint, 8, {
+        strokeColor: "Blue",
+        strokeWeight: 8,
+        strokeOpacity: 1,
+        Color: "Red",
+        fillColor: "#dd2233"
+      });
+      this.bmapData.map.addOverlay(circle);
+    }
   }
 
   public getClickInfo(e: any) {
@@ -68,12 +88,12 @@ export default class HelloWorld extends Vue {
   }
 
   async initWsSvc() {
-    this.sid = "testagv";
-    this.wsSvc = new WSService();
-    this.wsSvc.connect(this.sid);
-    this.wsSvc.msgSubject.subscribe(async data => {
-      console.log(data);
-    });
+    //     this.sid = "testagv";
+    //     this.wsSvc = new WSService();
+    // this.wsSvc.connect(this.sid);
+    // this.wsSvc.msgSubject.subscribe(async data => {
+    //   console.log(data);
+    // });
   }
 
   public processRemoteEvent(data: any) {

@@ -1,28 +1,50 @@
 <template>
-    <div id="app">
-        <router-view />
-    </div>
+  <div id="app">
+    <!-- <canvas id="particles11" class="bg-particles"></canvas> -->
+    <router-view />
+  </div>
 </template>
+
+<script>
+// import { particles } from "@/utils/bgparticles";
+
+// export default {
+//   name: "App",
+//   mounted: () => {
+//     particles("particles11");
+//   }
+// };
+//
+</script>
 
 <style lang="scss">
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  //   text-align: center;
+  color: #2c3e50;
+  width: 100%;
 }
 
 #nav {
-    padding: 30px;
+  padding: 30px;
 
-    a {
-        font-weight: bold;
-        color: #2c3e50;
+  a {
+    font-weight: bold;
+    color: #2c3e50;
 
-        &.router-link-exact-active {
-            color: #42b983;
-        }
+    &.router-link-exact-active {
+      color: #42b983;
     }
+  }
+}
+
+.bg-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
 }
 </style>

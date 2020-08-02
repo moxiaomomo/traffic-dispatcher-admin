@@ -37,7 +37,7 @@ export default class Home extends Vue {
       }
     });
     setInterval(() => {
-      WSService.sendMessage(JSON.stringify({ lon: 116.404, lat: 39.915 }));
+      WSService.sendMessage(JSON.stringify({ lng: 116.404, lat: 39.915 }));
     }, 5000);
   }
 }

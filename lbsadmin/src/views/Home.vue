@@ -1,27 +1,21 @@
 <template>
   <div class="home-container">
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
-    <HelloWorld style="width:100%;height:100%;" :locs="locs" />
+    <LBSStat style="width:100%;height:100%;" :locs="locs" />
   </div>
 </template>
 
 <script lang="ts">
 // @ is an alias to /src
-import HelloWorld, { GeoLocation } from "@/components/HelloWorld.vue";
+import LBSStat from "@/components/LBSStat/LBSStat.vue";
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { WSService } from "../service/ws.service";
-
-// export default {
-//   name: "Home",
-//   components: {
-//     HelloWorld
-//   }
-// };
+import { GeoLocation } from "../components/LBSStat/LBSStat.vue";
 
 @Component({
   components: {
-    HelloWorld
-  }
+    LBSStat,
+  },
 })
 export default class Home extends Vue {
   private locs: GeoLocation[] = [];
@@ -29,17 +23,16 @@ export default class Home extends Vue {
   public mounted(): void {
     WSService.initiate();
     WSService.connect(this.sidPrefix + new Date().getDate());
-    const that = this;
     WSService.msgSubject.subscribe((data: any) => {
       if (!(data instanceof Array)) {
         console.log("Unknown message:" + data);
         return;
       }
-      that.locs = [];
-      for (let ele of data) {
+      this.locs = [];
+      for (const ele of data) {
         const geo = ele.geoinfo.coordinates;
         if (geo instanceof Array && geo.length == 2) {
-          that.locs.push({ lng: geo[0], lat: geo[1] });
+          this.locs.push({ lng: geo[0], lat: geo[1] });
         }
       }
     });
